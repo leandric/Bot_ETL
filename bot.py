@@ -21,5 +21,4 @@ while True:
     dados = etl.desnormalizar(auxilar, dados)
     dados.to_csv('Uploads/DW.csv', encoding='ISO-8859-1', index=False,sep=";")
 
-
-    time.sleep(30000)
+    time.sleep(3600)

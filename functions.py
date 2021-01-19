@@ -1,6 +1,9 @@
 import os
 from ftplib import FTP
+from datetime import datetime, timedelta
+from sys import stdout
 import pandas as pd
+import time
 
 class RAIZ:
     def __init__(self):
@@ -85,28 +88,43 @@ class ETL:
 
     def desnormalizar(self, auxiliares={}, df = pd):
         for aux in auxiliares.keys():
-            df = pd.merge(left= df, right=auxiliares[aux], on=auxiliares[aux].columns.values[0])
 
+            df = pd.merge(left= df, right=auxiliares[aux], on=auxiliares[aux].columns.values[0])
             filtro=['SG_UF_RESIDENCIA'
-,'NU_IDADE'
-,'NU_NOTA_CN'
-,'NU_NOTA_CH'
-,'NU_NOTA_LC'
-,'NU_NOTA_MT'
-,'NU_NOTA_REDACAO'
-,'Tipo Fase'
-,'Intervalo Idade'
-,'Sexo'
-,'Raça Declarada'
-,'Conclusão Ensino Médio'
-,'Tipo Escola'
-,'Status da Redação'
-,'Idioma Escolhido'
-,'Presença Natureza'
-,'Presença Humanas'
-,'Presença Linguagem'
-,'Presença Matemática'
-,'Acesso a Internet'
-,'Renda Familiar'
-,'Nome Social']
+                ,'NU_IDADE'
+                ,'NU_NOTA_CN'
+                ,'NU_NOTA_CH'
+                ,'NU_NOTA_LC'
+                ,'NU_NOTA_MT'
+                ,'NU_NOTA_REDACAO'
+                ,'Tipo Fase'
+                ,'Intervalo Idade'
+                ,'Sexo'
+                ,'Raça Declarada'
+                ,'Conclusão Ensino Médio'
+                ,'Tipo Escola'
+                ,'Status da Redação'
+                ,'Idioma Escolhido'
+                ,'Presença Natureza'
+                ,'Presença Humanas'
+                ,'Presença Linguagem'
+                ,'Presença Matemática'
+                ,'Acesso a Internet'
+                ,'Renda Familiar'
+                ,'Nome Social']
         return df[filtro]
+
+class TMP:
+    def __init__(self):
+        pass
+
+    def wait(self, segundos = ''):
+        tempo = timedelta(seconds=segundos)
+        while (str(tempo) != '0:00:00'):
+            stdout.write("\r%s"%tempo)
+            stdout.flush()
+            tempo = tempo - timedelta(seconds=1)
+            time.sleep(1)
+    
+    stdout.write("\r0:00:00")
+    stdout.flush()

@@ -65,6 +65,48 @@ class FTP_Connection:
 
 
 class ETL:
-    def __init__(self, arquivo_csv='', colunas=[]):
-        self.df = pd.to_csv()
-        self.variaveis
+    def __init__(self,path=''):
+        self.path = path
+
+    def load_files(self,base_csv=''):
+        colunas = ['SG_UF_RESIDENCIA','NU_IDADE','TP_SEXO','TP_COR_RACA','TP_ANO_CONCLUIU','TP_ESCOLA','IN_NOME_SOCIAL','NU_NOTA_CN','NU_NOTA_CH','NU_NOTA_LC','NU_NOTA_MT','TP_STATUS_REDACAO','NU_NOTA_REDACAO','TP_LINGUA','Q006','Q025','TP_PRESENCA_CN','TP_PRESENCA_CH','TP_PRESENCA_LC','TP_PRESENCA_MT']
+        df = pd.read_csv(f'{self.path}/{base_csv}', encoding='ISO-8859-1', usecols=colunas, index_col=None, sep=';')
+        return df
+
+    def load_auxiliares(self, arquivo_xls=''):
+        #Carrega os dados das tabelas auxiliares
+        sheets =[]
+        sheets = pd.ExcelFile(f'{self.path}/{arquivo_xls}').sheet_names
+        auxiliares = {}
+
+        for sheet in sheets:
+            auxiliares[sheet] = pd.read_excel(open(f'{self.path}/{arquivo_xls}', 'rb'), sheet_name=sheet, index_col=None)
+        return auxiliares
+
+    def desnormalizar(self, auxiliares={}, df = pd):
+        for aux in auxiliares.keys():
+            df = pd.merge(left= df, right=auxiliares[aux], on=auxiliares[aux].columns.values[0])
+
+            filtro=['SG_UF_RESIDENCIA'
+,'NU_IDADE'
+,'NU_NOTA_CN'
+,'NU_NOTA_CH'
+,'NU_NOTA_LC'
+,'NU_NOTA_MT'
+,'NU_NOTA_REDACAO'
+,'Tipo Fase'
+,'Intervalo Idade'
+,'Sexo'
+,'Raça Declarada'
+,'Conclusão Ensino Médio'
+,'Tipo Escola'
+,'Status da Redação'
+,'Idioma Escolhido'
+,'Presença Natureza'
+,'Presença Humanas'
+,'Presença Linguagem'
+,'Presença Matemática'
+,'Acesso a Internet'
+,'Renda Familiar'
+,'Nome Social']
+        return df[filtro]

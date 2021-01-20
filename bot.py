@@ -9,6 +9,7 @@ ftp = functions.FTP_Connection('localhost')
 etl = functions.ETL('Downloads')
 historico = {}
 auxiliares = ['']
+tmp = functions.TMP()
 
 while True:
     ftp.conectar('leandric','teste123')
@@ -21,4 +22,4 @@ while True:
     dados = etl.desnormalizar(auxilar, dados)
     dados.to_csv('Uploads/DW.csv', encoding='ISO-8859-1', index=False,sep=";")
 
-    time.sleep(3600)
+    tmp.wait(360)

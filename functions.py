@@ -125,6 +125,7 @@ class TMP:
             stdout.flush()
             tempo = tempo - timedelta(seconds=1)
             time.sleep(1)
-    
-    stdout.write("\r0:00:00")
-    stdout.flush()
+
+        stdout.write("\r0:00:00")
+        stdout.flush()
+        print('\n')

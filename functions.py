@@ -42,11 +42,21 @@ class FTP_Connection:
 
     def conectar(self, user='', pwd=''):
         #realiza login no FTPserver
-        self.conection.login(user, pwd)
+        try:
+            self.conection.login(user, pwd)
+            print('Login realizado.')
+            return True, None
+        except Exception as error:
+            return False, error
 
     def diretorio(self, diretorio=''):
         #aponta para o diretorio informado no parametro no FTPserver
-        self.conection.cwd(diretorio)
+        try:
+            self.conection.cwd(diretorio)
+            print(f'Diretorio atual: {diretorio}')
+            return True, None
+        except Exception as error:
+            return False, error
 
     def listar(self):
         #lista os arquivos dentro do diretorio
@@ -54,17 +64,24 @@ class FTP_Connection:
 
     def down(self, arquivo = ''):
         #fazer o dowload de um arquivo
-        with open(f'Downloads/{arquivo}','wb') as local:
-            self.conection.retrbinary('RETR ' + arquivo, local.write, 1024)
-            local.close()
+        try:
+            with open(f'Downloads/{arquivo}','wb') as local:
+                self.conection.retrbinary('RETR ' + arquivo, local.write, 1024)
+                local.close()
+                print('Download concluído')
+            return True, None
+        except Exception as error:
+            return False, error
 
-    def up(self,arquivo):
+    def up(self, arquivo):
         #faz o upload de um arquivo
         try:
             local = open(f'Uploads/{arquivo}', rb)
             self.conection.storbinary('STOR ' + arquivo, local, 1024)
-        except Exception as erro:
-            return erro
+            print('Upload Concluído.')
+            return True, None
+        except Exception as error:
+            return False, error
 
 
 class ETL:
